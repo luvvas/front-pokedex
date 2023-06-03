@@ -6,36 +6,25 @@ import { Header } from '../components/Header';
 
 import Bulbasaur from '../../assets/bulbasaur.png';
 
-import { Poppins_700Bold, Poppins_700Bold_Italic, Poppins_500Medium, useFonts } from '@expo-google-fonts/poppins'
-
 import { api } from '../lib/api'
 
-export function Pokemon() {
-  async function listPokemons() {
-    const response = await api.get('/pokemon')
+export function Pokemon({ navigation }) {
+  // async function listPokemons() {
+  //   const response = await api.get('/pokemon')
 
-    console.log(response.data.results)
-  }
+  //   console.log(response.data.results)
+  // }
 
-  useEffect(() => {
-    listPokemons()
-  }, [])
-
-
-  const [hasLoadedFonts] = useFonts({
-    Poppins_700Bold, 
-    Poppins_700Bold_Italic, 
-    Poppins_500Medium
-  })
-
-  if(!hasLoadedFonts) return null
+  // useEffect(() => {
+  //   listPokemons()
+  // }, [])
 
   return (
     <View className='bg-emerald-600 w-full h-full'>
       <StatusBar style="light" translucent />
 
       {/* Header */}
-      <Header />
+      <Header navigation={navigation}/>
 
       {/* Pokemon Name and ID */}
       <View className='px-8 pt-3 flex-row items-baseline space-x-2'>
