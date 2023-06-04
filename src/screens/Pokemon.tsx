@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, View, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
@@ -6,18 +6,23 @@ import { Header } from '../components/Header';
 
 import Bulbasaur from '../../assets/bulbasaur.png';
 
-import { api } from '../lib/api'
+import axios from 'axios';
 
-export function Pokemon({ navigation }) {
-  // async function listPokemons() {
-  //   const response = await api.get('/pokemon')
 
-  //   console.log(response.data.results)
-  // }
+export function Pokemon({ navigation, route }) {
+  const { title, url } = route.params;
 
-  // useEffect(() => {
-  //   listPokemons()
-  // }, [])
+  const [types, setTypes] = useState([])
+
+  async function getPokemon() {
+    const response = await axios.get(url)
+
+    setTypes(response.data.types)
+  }
+
+  useEffect(() => {
+    getPokemon()
+  }, [])
 
   return (
     <View className='bg-emerald-600 w-full h-full'>
@@ -28,12 +33,22 @@ export function Pokemon({ navigation }) {
 
       {/* Pokemon Name and ID */}
       <View className='px-8 pt-3 flex-row items-baseline space-x-2'>
-        <Text className='text-3xl text-white font-title'>Bulbasaur</Text>
+        <Text className='text-3xl text-white font-title'>{title}</Text>
         <Text className='text-sm text-white font-alt'>#0001</Text>
       </View>
 
       {/* Pokemon Types */}
       <View className='px-8 pt-2 flex-row gap-4 items-center'>
+      {types.map((type) => {
+        return(
+            <View key={type.slot} className='bg-white/50 w-20 h-8 items-center justify-center rounded-full'>
+              <Text className='text-sm text-white font-title'>{type.type.name}</Text>
+            </View>
+        )
+      })}
+      </View>
+
+      {/* <View className='px-8 pt-2 flex-row gap-4 items-center'>
         <View className='bg-white/50 w-20 h-8 items-center justify-center rounded-full'>
           <Text className='text-sm text-white font-title'>Grass</Text>
         </View>
@@ -41,14 +56,14 @@ export function Pokemon({ navigation }) {
         <View className='bg-white/50 w-20 h-8 items-center justify-center rounded-full'>
           <Text className='text-sm text-white font-title'>Poison</Text>
         </View>
-      </View>
+      </View> */}
 
       {/* Pokemon Status and Image */}
       <View className='flex-row justify-between'>
         {/* Pokemon Status */}
         <View className='px-8 pb-5 mt-6'>
           <View>
-            <Text className="text-white font-title mb-[-5px]">HP</Text>
+            <Text className="text-white font-title mb-{-5px]">HP</Text>
             <View className='bg-white/50 w-32 h-1 rounded-full' />
           </View>
           
