@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, TextInput, ScrollView, View , FlatList } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
@@ -6,39 +6,25 @@ import { PokemonCard } from '../components/PokemonCard';
 
 import { AntDesign } from '@expo/vector-icons'; 
 
-const DATA = [
-  {
-    title: 'Bulbasaur',
-    id: '#001',
-  },
-  {
-    title: 'Bulbasaur',
-    id: '#002',
-  },
-  {
-    title: 'Bulbasaur',
-    id: '#003',
-  },
-  {
-    title: 'Bulbasaur',
-    id: '#004',
-  },
-  {
-    title: 'Bulbasaur',
-    id: '#005',
-  },
-  {
-    title: 'Bulbasaur',
-    id: '#006',
-  }
-];
-
+import { api } from '../lib/api'
 
 export function Home({ navigation }) {
+  const [pokemons, setPokemons] = useState([])
+
+  async function listPokemons() {
+    const response = await api.get('/pokemon')
+
+    setPokemons(response.data.results)
+  }
+
+  useEffect(() => {
+    listPokemons()
+  }, [])
+
   return(
     <ScrollView>
       <View className='py-12 px-4'>
-        <View className='px-4 mb-4'>
+        <View className='px-4 mb-4 pt-8'>
           <StatusBar style="dark" translucent />
 
           {/* Title and Description */}
@@ -55,16 +41,17 @@ export function Home({ navigation }) {
         </View>
 
         {/* Pokemon Card */}
-        <View className='overflow-hidden'>
-        <View className='pl-2 top-[-30px]'>
-          {/* FlatList */}
-          <FlatList 
-            data={DATA}
-            renderItem={({item}) => <PokemonCard navigation={navigation} title={item.title} code={item.id}/>}
-            keyExtractor={item => item.id}
-            numColumns={2}
-          />
-        </View>
+        <View className='overflow-hidden px-4'>
+          <View className='w-auto flex-row flex-wrap top-[-30px] justify-between'>
+            {/* Pokemons List */}
+            {pokemons.map((pokemon) => {
+              return (
+                <View key={pokemon.name}>
+                  <PokemonCard navigation={navigation} title={pokemon.name} url={pokemon.url}/>
+                </View>
+              )
+            })}
+          </View>
         </View>
       </View>
     </ScrollView>
