@@ -1,25 +1,33 @@
 import React, { useEffect, useState } from 'react'
-import { Text, TextInput, ScrollView, View , FlatList } from 'react-native';
+import { Text, TextInput, ScrollView, View , Button, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import { PokemonCard } from '../components/PokemonCard';
 
-import { AntDesign } from '@expo/vector-icons'; 
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'; 
 
 import { api } from '../lib/api'
 
 export function Home({ navigation }) {
   const [pokemons, setPokemons] = useState([])
+  const [offset, setOffset] = useState(0);
 
-  async function listPokemons() {
-    const response = await api.get('/pokemon')
+  async function listPokemons(page?) {
+    const response = await api.get(`/pokemon?offset=${page}&limit=10`)
 
-    setPokemons(response.data.results)
+    setPokemons(prevPokemons => [...prevPokemons,...response.data.results])
+  }
+
+  function handleLoadMore() {
+    setOffset(prevOffset => prevOffset + 20)
   }
 
   useEffect(() => {
-    listPokemons()
-  }, [])
+    listPokemons(offset)
+  }, [offset])
+
+  // chega uma hora que começa a lagar pq é muito pokemon
+  console.log(pokemons)
 
   return(
     <ScrollView>
@@ -44,14 +52,20 @@ export function Home({ navigation }) {
         <View className='overflow-hidden px-4'>
           <View className='w-auto flex-row flex-wrap top-[-30px] justify-between'>
             {/* Pokemons List */}
-            {pokemons.map((pokemon) => {
+            {pokemons.map((pokemon, index) => {
               return (
-                <View key={pokemon.name}>
+                <View key={index}>
                   <PokemonCard navigation={navigation} title={pokemon.name} url={pokemon.url}/>
                 </View>
               )
             })}
           </View>
+        </View>
+
+        <View className='items-center'>
+          <TouchableOpacity className="items-center bg-gray-300 p-4 rounded-full" onPress={handleLoadMore}>
+            <MaterialCommunityIcons className='' name="pokeball" size={24} color="red" />
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
