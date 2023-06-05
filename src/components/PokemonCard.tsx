@@ -12,14 +12,14 @@ export function PokemonCard({ navigation, title, url }) {
       
       setId(pokemonObject.data.id)
       setImage(pokemonObject.data.sprites.other['official-artwork'].front_default)
-  }
+    }
 
   useEffect(() => {
     getPokemon()
   }, [])
 
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('Pokemon', { title, url })}>
+    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('Pokemon', { title, url, image, id })}>
       <View className="items-center">
         <Image className='w-28 top-[40px] h-28 z-[1]' source={image ? {uri: image} : null} />
         <View className='p-6 h-28 w-36 bg-emerald-600/50 rounded-3xl items-center flex-col'>
