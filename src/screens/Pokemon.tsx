@@ -7,49 +7,54 @@ import { ProgressBar } from '../components/ProgressBar';
 
 import axios from 'axios';
 
-export interface Stat {
+type Stat = {
   base_stat: number
   effort: number
   stat: Stat2
 }
 
-export interface Stat2 {
+type Stat2 = {
   name: string
   url: string
 }
 
-export interface Type {
+type Type = {
   slot: number
   type: Type2
 }
 
-export interface Type2 {
+type Type2 = {
   name: string
   url: string
 }
 
-export interface Ability {
+type Ability = {
   ability: Ability2
   is_hidden: boolean
   slot: number
 }
 
-export interface Ability2 {
+type Ability2 = {
   name: string
   url: string
 }
 
-export interface Species {
+type Species = {
   name: string
   url: string
 }
 
-export interface Color {
+type Color = {
   name: string
+}
+
+type  FlavorText = {
+  flavor_text: string
 }
 
 type PokemonSpecies = {
   color: Color
+  flavor_text_entries: FlavorText[]
 }
 
 type PokemonData = {
@@ -67,6 +72,7 @@ export function Pokemon({ navigation, route }) {
 
   const [pokemonData, setPokemonData] = useState<null | PokemonData>(null)
   const [pokemonSpecies, setPokemonSpecies] = useState<null | PokemonSpecies>(null)
+  
   const [currentView, setCurrentView] = useState<'Informations' | 'Abilities' | 'Evolutions'>('Informations')
   
   async function getPokemon() {
@@ -78,12 +84,14 @@ export function Pokemon({ navigation, route }) {
     const pokemonSpecies = responseSpecies.data
     setPokemonSpecies(pokemonSpecies)
 
-    // color
-    // evolution_chain
-    // flavor_text_entries
-    // generation
-    // growth_rate
-    // habitat
+    console.log(pokemonSpecies.flavor_text_entries[0].flavor_text)
+
+    // check - color
+    // uncheck - evolution_chain
+    // check - flavor_text_entries
+    // uncheck - generation
+    // uncheck - growth_rate
+    // uncheck - habitat
   }
 
   useEffect(() => {
@@ -92,6 +100,7 @@ export function Pokemon({ navigation, route }) {
 
   const formattedWeight = pokemonData?.weight && pokemonData.weight / 10;
   const formattedHeight = pokemonData?.height && pokemonData.height / 10;
+  const formattedFlavorText = pokemonSpecies?.flavor_text_entries[0].flavor_text.replace(/\n/g, ' ')
 
   return (
     
@@ -173,6 +182,7 @@ export function Pokemon({ navigation, route }) {
               
 
               {currentView === 'Informations' && (
+                <>
                 <View style={{ backgroundColor: `${pokemonSpecies?.color.name}` }} className='flex-row items-center justify-between px-10 w-full h-20 rounded-2xl mt-5'>
                   <View className='items-center'>
                     <Text className='text-white text-lg font-title'>WEIGHT</Text>
@@ -186,6 +196,11 @@ export function Pokemon({ navigation, route }) {
                     <Text className='text-white text-xl font-body'>{formattedHeight} m</Text>
                   </View>
                 </View>
+
+                <View className='mt-5 '>
+                  <Text className='font-body text-center'>{formattedFlavorText}</Text>
+                </View>
+                </>
               )}
 
               {currentView === 'Abilities' && (

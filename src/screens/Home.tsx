@@ -27,7 +27,6 @@ export function Home({ navigation }) {
   }, [offset])
 
   // chega uma hora que começa a lagar pq é muito pokemon
-  console.log(pokemons)
 
   return(
     <ScrollView>
