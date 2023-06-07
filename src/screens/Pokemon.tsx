@@ -56,10 +56,15 @@ type Habitat = {
   name: string
 }
 
+type EvolutionChain = {
+  url: string
+}
+
 type PokemonSpecies = {
   color: Color
   flavor_text_entries: FlavorText[]
-  habitat: Habitat
+  habitat: Habitat,
+  evolution_chain: EvolutionChain
 }
 
 type PokemonData = {
@@ -69,15 +74,16 @@ type PokemonData = {
   abilities: Ability[];
   types: Type[];
   stats: Stat[];
-  species: Species[];
+  species: Species;
 }
 
 export function Pokemon({ navigation, route }) {
-  const { title, url, image, id } = route.params;
+  const { title, url, image, id, color } = route.params;
 
   const [pokemonData, setPokemonData] = useState<null | PokemonData>(null)
   const [pokemonSpecies, setPokemonSpecies] = useState<null | PokemonSpecies>(null)
-  
+  const [pokemonEvolutions, setPokemonEvolutions] = useState([])
+
   const [currentView, setCurrentView] = useState<'Informations' | 'Abilities' | 'Evolutions'>('Informations')
   const [isClicked, setIsClicked] = useState(true) 
 
@@ -90,14 +96,37 @@ export function Pokemon({ navigation, route }) {
     const pokemonSpecies = responseSpecies.data
     setPokemonSpecies(pokemonSpecies)
 
-    console.log(pokemonSpecies.habitat)
+    const responseEvolution = await axios.get(pokemonSpecies.evolution_chain.url)
+    console.log(responseEvolution.data.chain)
+
+    const allEvolutions = getAllEvolutions(responseEvolution.data)
+    setPokemonEvolutions(allEvolutions)
 
     // check - color
-    // uncheck - evolution_chain
+    // check - evolution_chain
     // check - flavor_text_entries
     // uncheck - generation
     // uncheck - growth_rate
-    // uncheck - habitat
+    // check - habitat
+  }
+
+  function getAllEvolutions(data) {
+    const evolutions = [];
+
+    function getEvolution(chain) {
+      if(chain.species && chain.species.name) {
+        evolutions.push(chain.species.name)
+      }
+
+      if (chain.evolves_to && chain.evolves_to.length > 0) {
+        chain.evolves_to.forEach((evolution) => {
+          getEvolution(evolution);
+        });
+      }
+    }
+
+    getEvolution(data.chain)
+    return evolutions
   }
 
   useEffect(() => {
@@ -109,10 +138,8 @@ export function Pokemon({ navigation, route }) {
   const formattedFlavorText = pokemonSpecies?.flavor_text_entries[0].flavor_text.replace(/\n/g, ' ')
 
   return (
-    
     <View>
-      {pokemonSpecies?.color.name && (
-        <View style={{ backgroundColor: `${pokemonSpecies?.color.name}` }} className="w-full h-full">
+        <View style={{ backgroundColor: `${color}` }} className="w-full h-full">
           <StatusBar style="light" translucent />
 
           {/* Header */}
@@ -157,11 +184,16 @@ export function Pokemon({ navigation, route }) {
 
           <View className='px-8 pt-6 bg-white border h-full rounded-t-3xl'>
             {/* Base Experience */}
-            <View className='flex-row text-center items-center gap-2 mt-2'>
-              <View style={{ backgroundColor: `${pokemonSpecies?.color.name}` }} className='p-2 w-10 items-center justify-center rounded-full'>
-                <Text className='text-white font-alt'>{pokemonData?.base_experience}</Text>
+            <View className='mt-2 justify-between flex-row'>
+              <View className='flex-row gap-2 text-center items-center'>
+                <View style={{ backgroundColor: `${color}` }} className='p-2 w-10 items-center justify-center rounded-full'>
+                  <Text className='text-white font-alt'>{pokemonData?.base_experience}</Text>
+                </View>
+                <Text style={{ color: `${color}` }} className='font-title'>Base Experience</Text>
               </View>
-              <Text style={{ color: `${pokemonSpecies?.color.name}` }} className='font-title'>Base Experience</Text>
+
+              {/* USAR HABITAT EM OUTRO LUGAR */}
+              {/* <Text style={{ color: `${color}` }} className='font-alt py-2'>{pokemonSpecies?.habitat?.name}</Text> */}
             </View>
 
             {/* Button tabs */}
@@ -171,9 +203,9 @@ export function Pokemon({ navigation, route }) {
                 onPress={() => setCurrentView('Informations')}
                 className='bg-white'
               >
-                <Text style={{ color: `${pokemonSpecies?.color.name}` }} className='font-title'>Informations</Text>
+                <Text style={{ color: `${color}` }} className='font-title'>Informations</Text>
                 {currentView === 'Informations' && (
-                  <View style={{ backgroundColor: `${pokemonSpecies?.color.name}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
+                  <View style={{ backgroundColor: `${color}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
                 )}
               </Pressable>
               
@@ -182,9 +214,9 @@ export function Pokemon({ navigation, route }) {
                 onPress={() => setCurrentView('Abilities')}
                 className='bg-white'
               >
-                <Text style={{ color: `${pokemonSpecies?.color.name}` }} className='font-title'>Abilities</Text>
+                <Text style={{ color: `${color}` }} className='font-title'>Abilities</Text>
                 {currentView === 'Abilities' && (
-                  <View style={{ backgroundColor: `${pokemonSpecies?.color.name}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
+                  <View style={{ backgroundColor: `${color}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
                 )}
               </Pressable>
               
@@ -193,16 +225,17 @@ export function Pokemon({ navigation, route }) {
                 onPress={() => setCurrentView('Evolutions')}
                 className='bg-white'
               >
-                <Text style={{ color: `${pokemonSpecies?.color.name}` }} className='font-title'>Evolutions</Text>
+                <Text style={{ color: `${color}` }} className='font-title'>Evolutions</Text>
                 {currentView === 'Evolutions' && (
-                  <View style={{ backgroundColor: `${pokemonSpecies?.color.name}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
+                  <View style={{ backgroundColor: `${color}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
                 )}
               </Pressable>
             </View>
               
+              {/* Informations View */}
               {currentView === 'Informations' && (
                 <>
-                <View style={{ backgroundColor: `${pokemonSpecies?.color.name}` }} className='flex-row items-center justify-between px-10 w-full h-20 rounded-2xl mt-5'>
+                <View style={{ backgroundColor: `${color}` }} className='flex-row items-center justify-between px-10 w-full h-20 rounded-2xl mt-5'>
                   <View className='items-center'>
                     <Text className='text-white text-lg font-title'>WEIGHT</Text>
                     <Text className='text-white text-xl font-body'>{formattedWeight} kg</Text>
@@ -222,12 +255,13 @@ export function Pokemon({ navigation, route }) {
                 </>
               )}
 
+              {/* Abilities View */}
               {currentView === 'Abilities' && (
                 pokemonData.abilities.map((ability, index) => {
                   return (
                     <View 
                       key={index}
-                      style={{ backgroundColor: `${pokemonSpecies?.color.name}` }}
+                      style={{ backgroundColor: `${color}` }}
                       className='w-full pl-2 py-3 rounded-lg mt-5'
                     >
                       <Text className='font-title text-white'>{ability.ability.name}</Text>
@@ -236,25 +270,22 @@ export function Pokemon({ navigation, route }) {
                 })
               )}
 
+              {/* Evolutions View */}
               {currentView === 'Evolutions' && (
-                <View style={{ backgroundColor: `${pokemonSpecies?.color.name}` }} className='flex-row items-center justify-between px-10 w-full h-20 rounded-2xl mt-5'>
-                  <View className='items-center'>
-                    <Text className='text-white text-lg font-title'>WEIGHT2</Text>
-                    <Text className='text-white text-xl font-title'>{formattedWeight} kg</Text>
-                  </View>
-
-                  <View className="bg-white w-[2px] h-3" />
-
-                  <View className='items-center'>
-                    <Text className='text-white text-lg font-title'>HEIGHT2</Text> 
-                    <Text className='text-white text-xl font-title'>{formattedHeight} m</Text>
-                  </View>
-                </View>
+                pokemonEvolutions.map((evolution, index) => {
+                  return (
+                    <View 
+                      key={index} 
+                      style={{ backgroundColor: `${color}` }} 
+                      className='w-full pl-2 py-3 rounded-lg mt-5'
+                    >
+                      <Text className='font-title text-white'>{evolution}</Text>
+                    </View>
+                  )
+                })
               )}  
             </View>
           </View>
-        
-      )}
       </View>
   );
 }
