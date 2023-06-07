@@ -64,7 +64,7 @@ export function Home({ navigation }) {
 
         <View className='items-center'>
           <TouchableOpacity className="items-center bg-gray-300 p-4 rounded-full" onPress={handleLoadMore}>
-            <MaterialCommunityIcons className='' name="pokeball" size={24} color="red" />
+            <MaterialCommunityIcons className='' name="pokeball" size={28} color="black" />
           </TouchableOpacity>
         </View>
       </View>
