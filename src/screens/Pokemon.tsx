@@ -48,13 +48,18 @@ type Color = {
   name: string
 }
 
-type  FlavorText = {
+type FlavorText = {
   flavor_text: string
+}
+
+type Habitat = {
+  name: string
 }
 
 type PokemonSpecies = {
   color: Color
   flavor_text_entries: FlavorText[]
+  habitat: Habitat
 }
 
 type PokemonData = {
@@ -74,7 +79,8 @@ export function Pokemon({ navigation, route }) {
   const [pokemonSpecies, setPokemonSpecies] = useState<null | PokemonSpecies>(null)
   
   const [currentView, setCurrentView] = useState<'Informations' | 'Abilities' | 'Evolutions'>('Informations')
-  
+  const [isClicked, setIsClicked] = useState(true) 
+
   async function getPokemon() {
     const responseData = await axios.get<PokemonData>(url)
     const pokemonData = responseData.data
@@ -84,7 +90,7 @@ export function Pokemon({ navigation, route }) {
     const pokemonSpecies = responseSpecies.data
     setPokemonSpecies(pokemonSpecies)
 
-    console.log(pokemonSpecies.flavor_text_entries[0].flavor_text)
+    console.log(pokemonSpecies.habitat)
 
     // check - color
     // uncheck - evolution_chain
@@ -160,27 +166,40 @@ export function Pokemon({ navigation, route }) {
 
             {/* Button tabs */}
             <View className='mt-4 flex-row justify-between'>
+              {/* Information Button */}
               <Pressable
                 onPress={() => setCurrentView('Informations')}
                 className='bg-white'
               >
                 <Text style={{ color: `${pokemonSpecies?.color.name}` }} className='font-title'>Informations</Text>
+                {currentView === 'Informations' && (
+                  <View style={{ backgroundColor: `${pokemonSpecies?.color.name}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
+                )}
               </Pressable>
+              
+              {/* Abilities Button */}
               <Pressable
                 onPress={() => setCurrentView('Abilities')}
                 className='bg-white'
               >
                 <Text style={{ color: `${pokemonSpecies?.color.name}` }} className='font-title'>Abilities</Text>
+                {currentView === 'Abilities' && (
+                  <View style={{ backgroundColor: `${pokemonSpecies?.color.name}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
+                )}
               </Pressable>
+              
+              {/* Evolutions Button */}
               <Pressable
                 onPress={() => setCurrentView('Evolutions')}
                 className='bg-white'
               >
                 <Text style={{ color: `${pokemonSpecies?.color.name}` }} className='font-title'>Evolutions</Text>
+                {currentView === 'Evolutions' && (
+                  <View style={{ backgroundColor: `${pokemonSpecies?.color.name}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
+                )}
               </Pressable>
             </View>
               
-
               {currentView === 'Informations' && (
                 <>
                 <View style={{ backgroundColor: `${pokemonSpecies?.color.name}` }} className='flex-row items-center justify-between px-10 w-full h-20 rounded-2xl mt-5'>
