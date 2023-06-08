@@ -31,6 +31,11 @@ export function Home({ navigation }) {
   }
 
   function handleLoadMore() {
+    // Pra stackar só tirar isso
+    setPokemons([])
+    setPokemonName('')
+    setPokemonUrl('')
+
     setOffset(prevOffset => prevOffset + 20)
   }
   
@@ -78,7 +83,7 @@ export function Home({ navigation }) {
 
         <View className='items-center'>
           <TouchableOpacity className="items-center bg-gray-300 p-4 rounded-full" onPress={handleLoadMore}>
-            <MaterialCommunityIcons className='' name="pokeball" size={28} color="black" />
+            <MaterialCommunityIcons name="pokeball" size={28} color="black" />
           </TouchableOpacity>
         </View>
       </View>

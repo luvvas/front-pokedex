@@ -148,7 +148,7 @@ export function Pokemon({ navigation, route }) {
           {/* Pokemon Name and ID */}
           <View className='px-8 pt-3 flex-row items-baseline space-x-2'>
             <Text className='text-3xl text-white font-title'>{title}</Text>
-            <Text className='text-sm text-white font-alt'>#000{id}</Text>
+            <Text className='text-sm text-white font-alt'>#{id}</Text>
           </View>
 
           {/* Pokemon Types */}
@@ -186,10 +186,10 @@ export function Pokemon({ navigation, route }) {
             {/* Base Experience */}
             <View className='mt-2 justify-between flex-row'>
               <View className='flex-row gap-2 text-center items-center'>
-                <View style={{ backgroundColor: `${color}` }} className='p-2 w-10 items-center justify-center rounded-full'>
+                <View style={color && { backgroundColor: `${color}` }} className='p-2 w-10 items-center justify-center rounded-full'>
                   <Text className='text-white font-alt'>{pokemonData?.base_experience}</Text>
                 </View>
-                <Text style={{ color: `${color}` }} className='font-title'>Base Experience</Text>
+                <Text style={color && { color: `${color}` }} className='font-title'>Base Experience</Text>
               </View>
 
               {/* USAR HABITAT EM OUTRO LUGAR */}
@@ -203,9 +203,9 @@ export function Pokemon({ navigation, route }) {
                 onPress={() => setCurrentView('Informations')}
                 className='bg-white'
               >
-                <Text style={{ color: `${color}` }} className='font-title'>Informations</Text>
+                <Text style={color && { color: `${color}` }} className='font-title'>Informations</Text>
                 {currentView === 'Informations' && (
-                  <View style={{ backgroundColor: `${color}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
+                  <View style={color && { backgroundColor: `${color}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
                 )}
               </Pressable>
               
@@ -214,9 +214,9 @@ export function Pokemon({ navigation, route }) {
                 onPress={() => setCurrentView('Abilities')}
                 className='bg-white'
               >
-                <Text style={{ color: `${color}` }} className='font-title'>Abilities</Text>
+                <Text style={color && { color: `${color}` }} className='font-title'>Abilities</Text>
                 {currentView === 'Abilities' && (
-                  <View style={{ backgroundColor: `${color}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
+                  <View style={color && { backgroundColor: `${color}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
                 )}
               </Pressable>
               
@@ -225,9 +225,9 @@ export function Pokemon({ navigation, route }) {
                 onPress={() => setCurrentView('Evolutions')}
                 className='bg-white'
               >
-                <Text style={{ color: `${color}` }} className='font-title'>Evolutions</Text>
+                <Text style={color && { color: `${color}` }} className='font-title'>Evolutions</Text>
                 {currentView === 'Evolutions' && (
-                  <View style={{ backgroundColor: `${color}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
+                  <View style={color && { backgroundColor: `${color}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
                 )}
               </Pressable>
             </View>
@@ -235,7 +235,7 @@ export function Pokemon({ navigation, route }) {
               {/* Informations View */}
               {currentView === 'Informations' && (
                 <>
-                <View style={{ backgroundColor: `${color}` }} className='flex-row items-center justify-between px-10 w-full h-20 rounded-2xl mt-5'>
+                <View style={color && { backgroundColor: `${color}` }} className='flex-row items-center justify-between px-10 w-full h-20 rounded-2xl mt-5'>
                   <View className='items-center'>
                     <Text className='text-white text-lg font-title'>WEIGHT</Text>
                     <Text className='text-white text-xl font-body'>{formattedWeight} kg</Text>
@@ -261,7 +261,7 @@ export function Pokemon({ navigation, route }) {
                   return (
                     <View 
                       key={index}
-                      style={{ backgroundColor: `${color}` }}
+                      style={color && { backgroundColor: `${color}` }}
                       className='w-full pl-2 py-3 rounded-lg mt-5'
                     >
                       <Text className='font-title text-white'>{ability.ability.name}</Text>
@@ -276,7 +276,7 @@ export function Pokemon({ navigation, route }) {
                   return (
                     <View 
                       key={index} 
-                      style={{ backgroundColor: `${color}` }} 
+                      style={color && { backgroundColor: `${color}` }} 
                       className='w-full pl-2 py-3 rounded-lg mt-5'
                     >
                       <Text className='font-title text-white'>{evolution}</Text>
