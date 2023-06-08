@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Text, TextInput, ScrollView, View , Button, TouchableOpacity } from 'react-native';
+import { Text, ScrollView, View, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import { PokemonCard } from '../components/PokemonCard';
+import { SearchBar } from '../components/SearchBar'
 
-import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'; 
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
 import { api } from '../lib/api'
 
 export function Home({ navigation }) {
   const [pokemons, setPokemons] = useState([])
+  const [pokemonName, setPokemonName] = useState('')
+  const [pokemonUrl, setPokemonUrl] = useState('')
   const [offset, setOffset] = useState(0);
 
   async function listPokemons(page?) {
@@ -18,15 +21,25 @@ export function Home({ navigation }) {
     setPokemons(prevPokemons => [...prevPokemons,...response.data.results])
   }
 
+  async function searchPokemons(pokemonName) {
+    setPokemons([])
+
+    const response = await api.get(`/pokemon/${pokemonName}`)
+    
+    setPokemonUrl(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+    setPokemonName(response.data.name)
+  }
+
   function handleLoadMore() {
     setOffset(prevOffset => prevOffset + 20)
   }
-
+  
   useEffect(() => {
     listPokemons(offset)
   }, [offset])
-
+  
   // chega uma hora que começa a lagar pq é muito pokemon
+  console.log(pokemonName, pokemonUrl)
 
   return(
     <ScrollView>
@@ -39,18 +52,13 @@ export function Home({ navigation }) {
           <Text className="font-body text-xs">Procure pelo nome ou número na Pokédex</Text>
           
           {/* Search Bar */}
-          <View className='mt-4 p-2 bg-gray-300 rounded-full'>
-            <View className='left-3 flex-row items-center space-x-3'>
-              <AntDesign name="search1" size={20} color="black" />
-              <TextInput placeholder='Nome ou número'/>
-            </View>
-          </View>
+          <SearchBar onSearch={searchPokemons} />
         </View>
 
         {/* Pokemon Card */}
         <View className='overflow-hidden px-4'>
           <View className='w-auto flex-row flex-wrap top-[-30px] justify-between'>
-            {/* Pokemons List */}
+            {/* Renders the Pokemons List */}
             {pokemons.map((pokemon, index) => {
               return (
                 <View key={index}>
@@ -58,6 +66,13 @@ export function Home({ navigation }) {
                 </View>
               )
             })}
+
+            {/* Renders the searched Pokemon Name */}
+            {pokemonName && pokemonUrl && (
+              <View>
+                <PokemonCard navigation={navigation} title={pokemonName} url={pokemonUrl} />
+              </View>
+            )}
           </View>
         </View>
 
