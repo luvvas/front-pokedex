@@ -85,7 +85,6 @@ export function Pokemon({ navigation, route }) {
   const [pokemonEvolutions, setPokemonEvolutions] = useState([])
 
   const [currentView, setCurrentView] = useState<'Informations' | 'Abilities' | 'Evolutions'>('Informations')
-  const [isClicked, setIsClicked] = useState(true) 
 
   async function getPokemon() {
     const responseData = await axios.get<PokemonData>(url)
@@ -204,7 +203,7 @@ export function Pokemon({ navigation, route }) {
               >
                 <Text style={color && { color: `${color}` }} className='font-title'>Informations</Text>
                 {currentView === 'Informations' && (
-                  <View style={color && { backgroundColor: `${color}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
+                  <View style={color && { backgroundColor: `${color}` }} className='bg-black h-[2px] rounded block' />
                 )}
               </Pressable>
               
@@ -215,7 +214,7 @@ export function Pokemon({ navigation, route }) {
               >
                 <Text style={color && { color: `${color}` }} className='font-title'>Abilities</Text>
                 {currentView === 'Abilities' && (
-                  <View style={color && { backgroundColor: `${color}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
+                  <View style={color && { backgroundColor: `${color}` }} className={'bg-black h-[2px] rounded block'} />
                 )}
               </Pressable>
               
@@ -226,7 +225,7 @@ export function Pokemon({ navigation, route }) {
               >
                 <Text style={color && { color: `${color}` }} className='font-title'>Evolutions</Text>
                 {currentView === 'Evolutions' && (
-                  <View style={color && { backgroundColor: `${color}` }} className={`bg-black h-[2px] rounded ${isClicked ? 'block' : 'hidden'}`} />
+                  <View style={color && { backgroundColor: `${color}` }} className={'bg-black h-[2px] rounded block'} />
                 )}
               </Pressable>
             </View>

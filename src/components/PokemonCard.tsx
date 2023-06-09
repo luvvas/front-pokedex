@@ -27,13 +27,16 @@ export function PokemonCard({ navigation, title, url }) {
     getPokemon()
   }, [])
 
+
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('Pokemon', { title, url, image, id, color })}>
+    <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Pokemon', { title, url, image, id, color })}>
       <View className="items-center">
         <Image className='w-28 top-[40px] h-28 z-[1]' source={image ? {uri: image} : null} />
-        <View style={{ backgroundColor: `${color}` }} className='p-6 h-28 w-36 rounded-3xl items-center flex-col'>
-          <Text className='font-title text-sm top-[20px]'>{title}</Text>
-          <Text className='font-body text-xs top-[20px]'>#00{id}</Text>
+        <View style={{ backgroundColor: 'white', elevation: 16, shadowColor: 'black', shadowOpacity: 0.58, shadowOffset: { width: 0, height: 12 }, shadowRadius: 16  }} className="rounded-3xl">
+          <View style={{ backgroundColor: `${color}` }} className='p-6 h-28 w-36 rounded-3xl items-center flex-col'>
+            <Text className='font-title text-sm top-[20px]'>{title}</Text>
+            <Text className='font-body text-xs top-[20px]'>#00{id}</Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
