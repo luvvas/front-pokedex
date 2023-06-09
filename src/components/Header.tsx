@@ -16,7 +16,6 @@ export function Header({ navigation, route, id }: Props) {
 
   const { addFavoritePokemon, removeFavoritePokemon, isPokemonFavorite } = 
   useContext(FavoritePokemonContext)
-  console.log(id)
 
   function handleFavoritePress() {
     if(isPokemonFavorite(id)) {
@@ -33,7 +32,7 @@ export function Header({ navigation, route, id }: Props) {
       </TouchableOpacity>
 
       <TouchableOpacity activeOpacity={0.7} onPress={handleFavoritePress}>
-        <AntDesign name={isPokemonFavorite(id) ? 'heart' : 'hearto'} size={24} color="white" />
+        <AntDesign name={isPokemonFavorite(id) ? 'heart' : 'hearto'} size={24} color={isPokemonFavorite(id) ? 'red' : 'white'} />
       </TouchableOpacity>
     </View>
   )
