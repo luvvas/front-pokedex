@@ -67,7 +67,7 @@ type PokemonSpecies = {
   evolution_chain: EvolutionChain
 }
 
-type PokemonData = {
+export type PokemonData = {
   weight: number;
   height: number;
   base_experience: number;
@@ -97,7 +97,6 @@ export function Pokemon({ navigation, route }) {
     setPokemonSpecies(pokemonSpecies)
 
     const responseEvolution = await axios.get(pokemonSpecies.evolution_chain.url)
-    console.log(responseEvolution.data.chain)
 
     const allEvolutions = getAllEvolutions(responseEvolution.data)
     setPokemonEvolutions(allEvolutions)
@@ -143,7 +142,7 @@ export function Pokemon({ navigation, route }) {
           <StatusBar style="light" translucent />
 
           {/* Header */}
-          <Header navigation={navigation}/>
+          <Header id={id} route={route} navigation={navigation}/>
 
           {/* Pokemon Name and ID */}
           <View className='px-8 pt-3 flex-row items-baseline space-x-2'>
