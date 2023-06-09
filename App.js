@@ -1,6 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
+import { FavoritePokemonProvider } from './src/contexts/FavoritesContext'
+
 import { Pokemon } from './src/screens/Pokemon'
 import { Home } from './src/screens/Home'
 
@@ -18,11 +20,13 @@ export default function App() {
   if(!hasLoadedFonts) return null
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={Home} screenOptions={{headerShown: false}} >
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Pokemon" component={Pokemon} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <FavoritePokemonProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName={Home} screenOptions={{headerShown: false}} >
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="Pokemon" component={Pokemon} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </FavoritePokemonProvider>
   );
 }
