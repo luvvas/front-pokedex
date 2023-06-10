@@ -60,11 +60,16 @@ type EvolutionChain = {
   url: string
 }
 
+type Generation = {
+  name: string
+}
+
 type PokemonSpecies = {
   color: Color
   flavor_text_entries: FlavorText[]
   habitat: Habitat,
   evolution_chain: EvolutionChain
+  generation: Generation
 }
 
 export type PokemonData = {
@@ -99,13 +104,7 @@ export function Pokemon({ navigation, route }) {
 
     const allEvolutions = getAllEvolutions(responseEvolution.data)
     setPokemonEvolutions(allEvolutions)
-
-    // check - color
-    // check - evolution_chain
-    // check - flavor_text_entries
-    // uncheck - generation
     // uncheck - growth_rate
-    // check - habitat
   }
 
   function getAllEvolutions(data) {
@@ -135,13 +134,15 @@ export function Pokemon({ navigation, route }) {
   const formattedHeight = pokemonData?.height && pokemonData.height / 10;
   const formattedFlavorText = pokemonSpecies?.flavor_text_entries[0].flavor_text.replace(/\n/g, ' ')
 
+  console.log(pokemonEvolutions)
+
   return (
     <View>
         <View style={{ backgroundColor: `${color}` }} className="w-full h-full">
           <StatusBar style="light" translucent />
 
           {/* Header */}
-          <Header id={id} route={route} navigation={navigation}/>
+          <Header id={id} generation={pokemonSpecies?.generation?.name} route={route} navigation={navigation}/>
 
           {/* Pokemon Name and ID */}
           <View className='px-8 pt-3 flex-row items-baseline space-x-2'>

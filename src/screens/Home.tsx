@@ -1,13 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
 import { Text, ScrollView, View, TouchableOpacity, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import { PokemonCard } from '../components/PokemonCard';
-import { SearchBar } from '../components/SearchBar'
+import { SearchBar } from '../components/SearchBar';
 
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
-import { api } from '../lib/api'
+
+import { api } from '../lib/api';
 
 import { FavoritePokemonContext } from '../contexts/FavoritesContext';
 
@@ -48,7 +49,16 @@ export function Home({ navigation }) {
     setPokemonUrl('')
     setLoading(true);
 
-    setOffset(prevOffset => prevOffset + 20)
+    setOffset(prevOffset => prevOffset + 10)
+  }
+
+  function previousPokemons() {
+    setPokemons([])
+    setPokemonName('')
+    setPokemonUrl('')
+    if(offset > 0) {
+      setOffset(prevOffset => prevOffset - 10)
+    }
   }
   
   useEffect(() => {
@@ -72,7 +82,15 @@ export function Home({ navigation }) {
             <SearchBar onSearch={searchPokemons} />
           </View>
 
-          <View className='px-4 flex-row justify-center gap-5'>
+          <View className={`px-4 flex-row items-center ${currentView === 'Pokemons' ? 'justify-between' : 'justify-center' } gap-5`}>
+            { currentView === 'Pokemons' && (
+              <View className='bg-gray-300 rounded-full p-2'>
+                <Pressable onPress={previousPokemons}>
+                  <MaterialIcons name="arrow-left" size={24} color="black" />
+                </Pressable>
+              </View>
+            )}
+
             <Pressable onPress={() => setCurrentView('Pokemons')}>
               <Text className='font-title'>Pokemons</Text>
               {currentView === 'Pokemons' && (
@@ -85,6 +103,14 @@ export function Home({ navigation }) {
                 <View className='bg-black h-[2px] rounded block}' />
               )}
             </Pressable>
+
+            { currentView === 'Pokemons' && (
+              <View className='bg-gray-300 rounded-full p-2'>
+                <Pressable onPress={handleLoadMore}>
+                  <MaterialIcons name="arrow-right" size={24} color="black" />
+                </Pressable>
+              </View>
+            )}
           </View>
 
           {loading ? (
@@ -122,7 +148,6 @@ export function Home({ navigation }) {
             )
           )}
                 
-
           {currentView === 'Favoritos' && (
             <View className='overflow-hidden px-4'>
               <View className='w-auto flex-row flex-wrap top-[-30px] justify-between'>
