@@ -55,15 +55,24 @@ export type Generation = {
   name: string
 }
 
+export type Sprite = {
+  front_default: string;
+}
+
+export type PokemonSprites = {
+  other: Sprite
+}
+
 export type PokemonSpecies = {
   color: Color
-  flavor_text_entries: FlavorText[]
+  flavor_text_entries: FlavorText
   habitat: Habitat,
   evolution_chain: EvolutionChain
   generation: Generation
 }
 
 export type PokemonData = {
+  id: number;
   weight: number;
   height: number;
   base_experience: number;
@@ -71,4 +80,5 @@ export type PokemonData = {
   types: Type[];
   stats: Stat[];
   species: Species;
+  sprites: PokemonSprites;
 }

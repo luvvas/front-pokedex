@@ -14,7 +14,7 @@ export function Pokemon({ navigation, route }) {
 
   const [pokemonData, setPokemonData] = useState<null | PokemonData>(null)
   const [pokemonSpecies, setPokemonSpecies] = useState<null | PokemonSpecies>(null)
-  const [pokemonEvolutions, setPokemonEvolutions] = useState([])
+  const [pokemonEvolutions, setPokemonEvolutions] = useState(null)
 
   const [currentView, setCurrentView] = useState<'Informations' | 'Abilities' | 'Evolutions'>('Informations')
 

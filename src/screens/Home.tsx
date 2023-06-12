@@ -5,11 +5,13 @@ import { StatusBar } from 'expo-status-bar';
 import { PokemonCard } from '../components/PokemonCard';
 import { SearchBar } from '../components/SearchBar';
 
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons, AntDesign } from '@expo/vector-icons';
 
 import { api } from '../lib/api';
 
 import { FavoritePokemonContext } from '../contexts/FavoritesContext';
+
+
 
 export function Home({ navigation }) {
   const { favoritePokemon } = useContext(FavoritePokemonContext)
@@ -55,6 +57,7 @@ export function Home({ navigation }) {
     setPokemons([])
     setPokemonName('')
     setPokemonUrl('')
+    
     if(offset > 0) {
       setOffset(prevOffset => prevOffset - 10)
     }
@@ -70,7 +73,14 @@ export function Home({ navigation }) {
   return(
       <ScrollView>
         <View className='py-12 px-4'>
-          <View className='px-4 mb-4 pt-8'>
+          {/* Header */}
+          <View className='px-4'>
+            <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.goBack()}>
+              <AntDesign name="arrowleft" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+
+          <View className='px-4 mb-4 pt-4'>
             <StatusBar style="dark" translucent />
 
             {/* Title and Description */}
