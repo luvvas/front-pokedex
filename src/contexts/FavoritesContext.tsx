@@ -17,7 +17,7 @@ export const FavoritePokemonContext = createContext(
   {} as FavoritePokemonContextValue
 );
 
-export function FavoritePokemonProvider({ children }: { children: ReactNode}) {
+export function FavoritePokemonProvider({ children }: { children: ReactNode }) {
   const [favoritePokemon, setFavoritePokemon] = useState([])
 
   const addFavoritePokemon = (favoritePokemon: FavoritePokemon) => {

@@ -2,6 +2,8 @@ import { TouchableOpacity, Text, View, ImageBackground } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import Pokemons from '../../assets/pokemons.png'
+import Locations from '../../assets/locations.png'
+
 
 export function Menu ({ navigation }) {
   return (
@@ -16,7 +18,7 @@ export function Menu ({ navigation }) {
           <ImageBackground
             source={Pokemons}
             imageStyle={{ resizeMode: 'cover' }}
-            blurRadius={10}
+            blurRadius={5}
             className='p-8 items-center'
           >
             <Text className='text-lg text-black font-title'>Pokemons</Text>
@@ -26,9 +28,18 @@ export function Menu ({ navigation }) {
 
       </TouchableOpacity>
 
-      <TouchableOpacity activeOpacity={0.7} className='p-8 bg-green-600 rounded-md w-full items-center'>
-      <Text className='font-title'>Lugares</Text>
+      <TouchableOpacity activeOpacity={0.7}>
+        <View className='rounded-lg overflow-hidden border'>
+          <ImageBackground
+            source={Locations}
+            imageStyle={{ resizeMode: 'cover' }}
+            blurRadius={5}
+            className='p-8 items-center'
+          >
+            <Text className='font-title text-lg text-black'>Lugares</Text>
 
+          </ImageBackground>
+        </View>
       </TouchableOpacity>
     </View>
   )
