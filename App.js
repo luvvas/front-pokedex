@@ -1,7 +1,9 @@
+import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 import { FavoritePokemonProvider } from './src/contexts/FavoritesContext'
+import { AuthProvider } from './src/contexts/AuthContext'
 
 import { Auth } from './src/screens/Auth'
 import { Menu } from './src/screens/Menu'
@@ -22,15 +24,17 @@ export default function App() {
   if(!hasLoadedFonts) return null
 
   return (
-    <FavoritePokemonProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName={Menu} screenOptions={{headerShown: false}} >
-          <Stack.Screen name="Auth" component={Auth} />
-          <Stack.Screen name="Menu" component={Menu} />
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="Pokemon" component={Pokemon} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </FavoritePokemonProvider>
+    <AuthProvider>
+      <FavoritePokemonProvider>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName={Auth} screenOptions={{headerShown: false}} >
+            <Stack.Screen name="Auth" component={Auth} />
+            <Stack.Screen name="Menu" component={Menu} />
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="Pokemon" component={Pokemon} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </FavoritePokemonProvider>
+    </AuthProvider>
   );
 }
