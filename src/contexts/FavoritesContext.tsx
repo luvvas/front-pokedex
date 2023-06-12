@@ -1,6 +1,4 @@
-import React, { useState, createContext } from 'react'
-
-import { PokemonData } from '../types/pokemon'
+import React, { useState, createContext, ReactNode } from 'react'
 
 type FavoritePokemon = {
   title: string;
@@ -9,7 +7,7 @@ type FavoritePokemon = {
 }
 
 type FavoritePokemonContextValue = {
-  favoritePokemon: PokemonData[];
+  favoritePokemon: FavoritePokemon[];
   addFavoritePokemon: (pokemon: FavoritePokemon) => void;
   removeFavoritePokemon: (pokemonId: number) => void;
   isPokemonFavorite: (pokemonId: number) => boolean;
@@ -19,7 +17,7 @@ export const FavoritePokemonContext = createContext(
   {} as FavoritePokemonContextValue
 );
 
-export function FavoritePokemonProvider({ children }: { children: React.ReactNode}) {
+export function FavoritePokemonProvider({ children }: { children: ReactNode}) {
   const [favoritePokemon, setFavoritePokemon] = useState([])
 
   const addFavoritePokemon = (favoritePokemon: FavoritePokemon) => {
