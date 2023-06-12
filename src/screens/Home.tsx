@@ -7,7 +7,6 @@ import { SearchBar } from '../components/SearchBar';
 
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
-
 import { api } from '../lib/api';
 
 import { FavoritePokemonContext } from '../contexts/FavoritesContext';

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View , Image } from 'react-native';
+import { transparentize } from 'polished';
 import axios from 'axios';
 
-import { transparentize } from 'polished';
 
 export function PokemonCard({ navigation, title, url }) {
   const [id, setId] = useState(0)

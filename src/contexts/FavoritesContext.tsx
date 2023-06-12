@@ -1,6 +1,6 @@
 import React, { useState, createContext } from 'react'
 
-import { PokemonData } from '../screens/Pokemon'
+import { PokemonData } from '../types/pokemon'
 
 type FavoritePokemon = {
   title: string;
