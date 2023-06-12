@@ -9,11 +9,11 @@ import { MaterialCommunityIcons, MaterialIcons, AntDesign } from '@expo/vector-i
 
 import { api } from '../lib/api';
 
+import { AuthContext } from '../contexts/AuthContext';
 import { FavoritePokemonContext } from '../contexts/FavoritesContext';
 
-
-
 export function Home({ navigation }) {
+  const { removeToken } = useContext(AuthContext);
   const { favoritePokemon } = useContext(FavoritePokemonContext)
 
   const [pokemons, setPokemons] = useState([]);
@@ -62,6 +62,10 @@ export function Home({ navigation }) {
       setOffset(prevOffset => prevOffset - 10)
     }
   }
+
+  function handleLogout() {
+    removeToken(navigation)
+  }
   
   useEffect(() => {
     listPokemons(offset)
@@ -74,9 +78,12 @@ export function Home({ navigation }) {
       <ScrollView>
         <View className='py-12 px-4'>
           {/* Header */}
-          <View className='px-4'>
+          <View className='px-4 flex-row justify-between'>
             <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.goBack()}>
               <AntDesign name="arrowleft" size={24} color="black" />
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.7} onPress={handleLogout}>
+              <MaterialIcons name="logout" size={24} color="red" />
             </TouchableOpacity>
           </View>
 

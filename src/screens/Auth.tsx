@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { TouchableOpacity, View, Text } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
@@ -7,7 +7,10 @@ import { AntDesign } from '@expo/vector-icons';
 
 import axios from "axios";
 
-export function Auth () {
+import { AuthContext } from '../contexts/AuthContext'
+
+export function Auth ({ navigation }) {
+  const { getToken, storeToken } = useContext(AuthContext)
 
   const discovery = {
     authorizationEndpoint: 'https://github.com/login/oauth/authorize',
@@ -15,7 +18,7 @@ export function Auth () {
     revocationEndpoint: 'https://github.com/settings/connections/applications/b316d223394792f3a832',
   };
 
-  const [request, response, signInWithGithub] = useAuthRequest(
+  const [, response, signInWithGithub] = useAuthRequest(
     {
       clientId: 'b316d223394792f3a832',
       scopes: ['identity'],
@@ -41,21 +44,29 @@ export function Auth () {
     })
 
     const { access_token } = accessTokenResponse.data
-    return access_token
+    storeToken(navigation, access_token)
+    
+    // const userResponse = await axios.get('https://api.github.com/user', {
+    //   headers: {
+    //     Authorization: `Bearer ${access_token}`
+    //   }
+    // })
+
+    // const { name, avatar_url } = userResponse.data
   }
+
+  useEffect(() => {
+    getToken(navigation)
+  }, [])
 
   useEffect(() => {
     if(response?.type === 'success') {
       const { code } = response.params
 
-      const getResult = async () => {
-        const result = await getAuthentication(code);
-        console.log(result);
-      };
-
-      getResult();
+      getAuthentication(code);
     }
   }, [response])
+
 
   return (
     <View className="h-screen justify-center space-y-8 p-8">
