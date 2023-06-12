@@ -3,8 +3,10 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import { FavoritePokemonProvider } from './src/contexts/FavoritesContext'
 
-import { Pokemon } from './src/screens/Pokemon'
+import { Auth } from './src/screens/Auth'
+import { Menu } from './src/screens/Menu'
 import { Home } from './src/screens/Home'
+import { Pokemon } from './src/screens/Pokemon'
 
 import { Poppins_700Bold, Poppins_700Bold_Italic, Poppins_500Medium, useFonts } from '@expo-google-fonts/poppins'
 
@@ -22,7 +24,9 @@ export default function App() {
   return (
     <FavoritePokemonProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={Home} screenOptions={{headerShown: false}} >
+        <Stack.Navigator initialRouteName={Menu} screenOptions={{headerShown: false}} >
+          <Stack.Screen name="Auth" component={Auth} />
+          <Stack.Screen name="Menu" component={Menu} />
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Pokemon" component={Pokemon} />
         </Stack.Navigator>
