@@ -11,7 +11,7 @@ export function SearchBar({ onSearch }) {
   }
 
   return (
-    <View className='mt-4 p-2 bg-gray-300 rounded-full'>
+    <View className='w-[80%] p-2 bg-gray-300 rounded-full'>
       <View className='left-3 flex-row items-center space-x-3'>
         <AntDesign name="search1" size={20} color="black" />
         <TextInput 

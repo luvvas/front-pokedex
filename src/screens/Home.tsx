@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { PokemonCard } from '../components/PokemonCard';
 import { SearchBar } from '../components/SearchBar';
 
-import { MaterialCommunityIcons, MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 
 import { api } from '../lib/api';
 
@@ -23,6 +23,7 @@ export function Home({ navigation }) {
 
   const [loading, setLoading] = useState(true);
   const [currentView, setCurrentView] = useState<'Pokemons' | 'Favoritos'>('Pokemons');
+  const [typesView, setTypesView] = useState(false)
 
   const [offset, setOffset] = useState(0);
 
@@ -49,6 +50,7 @@ export function Home({ navigation }) {
     setLoading(false)
   }
 
+  // COMO RENDERIZAR MENOS POKEMONS?
   async function searchTypes(type) {
     setPokemons([])
     setLoading(true)
@@ -112,25 +114,36 @@ export function Home({ navigation }) {
             <Text className="font-body text-xs">Procure pelo nome ou número na Pokédex</Text>
             
             {/* Search Bar */}
-            <SearchBar onSearch={searchPokemons} />
-
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View className='flex-row justify-between mt-4 space-x-2'>
-            {types.map((type, index) => {
-              return(
-                <View key={index}>
-                  <TouchableOpacity
-                    activeOpacity={0.7} 
-                    onPress={() => searchTypes(type.name)}
-                    className={`px-4 h-6 bg-black items-center justify-center rounded-full`}
-                  >
-                    <Text className='text-xs text-white font-alt'>{type.name}</Text>
-                  </TouchableOpacity>
-                </View>
-              )
-            })}
+            <View className='flex-row items-center mt-4 justify-between'>
+              <SearchBar onSearch={searchPokemons} />
+              <Pressable className='p-4 bg-gray-300 rounded-xl' onPress={() => setTypesView(!typesView)}>
+                <FontAwesome name="filter" size={14} color="black" />
+              </Pressable>
             </View>
-            </ScrollView>
+
+
+            {typesView ? (
+              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+              <View className='flex-row justify-between mt-4 space-x-2'>
+              {types.map((type, index) => {
+                return(
+                  <View key={index}>
+                    <TouchableOpacity
+                      activeOpacity={0.7} 
+                      onPress={() => searchTypes(type.name)}
+                      className={`px-4 h-6 bg-black items-center justify-center rounded-full`}
+                    >
+                      <Text className='text-xs text-white font-alt'>{type.name}</Text>
+                    </TouchableOpacity>
+                  </View>
+                )
+              })}
+              </View>
+              </ScrollView>
+            ): (
+              <View></View>
+            )}
+            
           </View>
 
           <View className={`px-4 flex-row items-center ${currentView === 'Pokemons' ? 'justify-between' : 'justify-center' } gap-5`}>
