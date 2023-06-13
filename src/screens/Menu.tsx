@@ -53,20 +53,6 @@ export function Menu ({ navigation }) {
           </View>
 
         </TouchableOpacity>
-
-        <TouchableOpacity activeOpacity={0.7}>
-          <View className='rounded-lg overflow-hidden border'>
-            <ImageBackground
-              source={Locations}
-              imageStyle={{ resizeMode: 'cover' }}
-              blurRadius={5}
-              className='p-8 items-center'
-            >
-              <Text className='font-title text-lg text-black'>Lugares</Text>
-
-            </ImageBackground>
-          </View>
-        </TouchableOpacity>
       </View>
     </View>
   )
