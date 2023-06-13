@@ -10,7 +10,7 @@ import axios from "axios";
 import { AuthContext } from '../contexts/AuthContext'
 
 export function Auth ({ navigation }) {
-  const { getToken, storeToken } = useContext(AuthContext)
+  const { storeUser, getToken, storeAvatar, storeToken } = useContext(AuthContext)
 
   const discovery = {
     authorizationEndpoint: 'https://github.com/login/oauth/authorize',
@@ -46,13 +46,16 @@ export function Auth ({ navigation }) {
     const { access_token } = accessTokenResponse.data
     storeToken(navigation, access_token)
     
-    // const userResponse = await axios.get('https://api.github.com/user', {
-    //   headers: {
-    //     Authorization: `Bearer ${access_token}`
-    //   }
-    // })
+    const userResponse = await axios.get('https://api.github.com/user', {
+      headers: {
+        Authorization: `Bearer ${access_token}`
+      }
+    })
 
-    // const { name, avatar_url } = userResponse.data
+    const { name, avatar_url } = userResponse.data
+
+    storeUser(name)
+    storeAvatar(avatar_url)
   }
 
   useEffect(() => {
