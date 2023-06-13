@@ -7,7 +7,6 @@ import { AuthContext } from '../contexts/AuthContext';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import Pokemons from '../../assets/pokemons.png'
-import Locations from '../../assets/locations.png'
 
 export function Menu ({ navigation }) {
   const { username, avatar, getUser, getAvatar, removeToken } = useContext(AuthContext)
@@ -27,7 +26,7 @@ export function Menu ({ navigation }) {
 
       <View className='flex-row items-center justify-between'>
         <View className='flex-row items-center gap-2'>
-          <Image className='w-8 h-8 rounded-full' source={{ uri: avatar }} />
+          <Image className='w-8 h-8 rounded-full' source={{ uri: avatar ? avatar : null }} />
           <Text className='font-body'>{username}</Text>
         </View>
         <TouchableOpacity activeOpacity={0.7} onPress={handleLogout}>

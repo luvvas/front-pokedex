@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Text, View, Image, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
