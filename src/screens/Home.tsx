@@ -12,19 +12,43 @@ import { api } from '../lib/api';
 import { AuthContext } from '../contexts/AuthContext';
 import { FavoritePokemonContext } from '../contexts/FavoritesContext';
 
+const typeColors = {
+  normal: '#d1d5db',
+  grass: '#16a34a',
+  fighting: '#fca5a5',
+  flying: '#34d399',
+  poison: '#15803d',
+  ground: '#92400e',
+  rock: '#57534e',
+  bug: '#a16207',
+  ghost: '#525252',
+  steel: '#3f3f46',
+  fire: '#ef4444',
+  water: '#60a5fa',
+  electric: '#facc15',
+  psychic: '#6b21a8',
+  ice: '#93c5fd',
+  dragon: '#f97316',
+  dark: '#171717',
+  fairy: '#ec4899',
+  unknown: '#020617',
+  shadow: '#020617'
+};
+
 export function Home({ navigation }) {
   const { avatar } = useContext(AuthContext)
   const { favoritePokemon } = useContext(FavoritePokemonContext)
 
   const [pokemons, setPokemons] = useState([]);
-  const [pokemonName, setPokemonName] = useState('');
-  const [pokemonUrl, setPokemonUrl] = useState('');
+  const [pokemonName, setPokemonName] = useState<string>('');
+  const [pokemonUrl, setPokemonUrl] = useState<string>('');
   const [types, setTypes] = useState([])
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [currentView, setCurrentView] = useState<'Pokemons' | 'Favoritos'>('Pokemons');
-  const [typesView, setTypesView] = useState(false)
-
+  const [typesView, setTypesView] = useState<boolean>(false)
+  const [selectedType, setSelectedType] = useState('')
+ 
   const [offset, setOffset] = useState(0);
 
   async function listPokemons(page?) {
@@ -52,6 +76,7 @@ export function Home({ navigation }) {
 
   // COMO RENDERIZAR MENOS POKEMONS?
   async function searchTypes(type) {
+    setSelectedType(type)
     setPokemons([])
     setLoading(true)
 
@@ -82,14 +107,14 @@ export function Home({ navigation }) {
       setOffset(prevOffset => prevOffset - 10)
     }
   }
-  
+
   useEffect(() => {
     listPokemons(offset)
     listTypes()
   }, [offset])
   
   // chega uma hora que começa a lagar pq é muito pokemon
-  // console.log(favoritePokemon)
+  // console.log(pokemons)
 
   return(
       <ScrollView>
@@ -131,9 +156,10 @@ export function Home({ navigation }) {
                     <TouchableOpacity
                       activeOpacity={0.7} 
                       onPress={() => searchTypes(type.name)}
-                      className={`px-4 h-6 bg-black items-center justify-center rounded-full`}
+                      style={{ borderWidth: selectedType === type.name ? 1 : 0, backgroundColor: typeColors[type.name] }}
+                      className={'px-4 h-6 bg-gray-300 items-center justify-center rounded-full'}
                     >
-                      <Text className='text-xs text-white font-alt'>{type.name}</Text>
+                      <Text className='text-xs text-black font-alt'>{type.name}</Text>
                     </TouchableOpacity>
                   </View>
                 )
