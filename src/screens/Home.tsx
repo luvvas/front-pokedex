@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import { Text, ScrollView, View, TouchableOpacity, Pressable, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
@@ -35,13 +35,30 @@ const typeColors = {
   shadow: '#020617'
 };
 
+const initialState = {
+  pokemons: [], 
+  pokemonName: '',
+  pokemonUrl: ''
+}
+
+function reducer(state, action) {
+  switch(action.type) {
+    case 'SET_POKEMONS' : 
+      return { ...state, pokemons: action.payload }
+    case 'SET_POKEMON_NAME' :
+      return { ...state, pokemonName: action.payload }
+    case 'SET_POKEMON_URL' :
+      return { ...state, pokemonUrl: action.payload }
+  }
+}
+
 export function Home({ navigation }) {
   const { avatar } = useContext(AuthContext)
   const { favoritePokemon } = useContext(FavoritePokemonContext)
 
-  const [pokemons, setPokemons] = useState([]);
-  const [pokemonName, setPokemonName] = useState<string>('');
-  const [pokemonUrl, setPokemonUrl] = useState<string>('');
+  const [state, dispatch] = useReducer(reducer, initialState)
+  const { pokemons, pokemonName, pokemonUrl } = state
+
   const [types, setTypes] = useState([])
 
   const [loading, setLoading] = useState<boolean>(true);
@@ -54,7 +71,7 @@ export function Home({ navigation }) {
   async function listPokemons(page?) {
     const response = await api.get(`/pokemon?offset=${page}&limit=10`)
 
-    setPokemons(prevPokemons => [...prevPokemons,...response.data.results])
+    dispatch({ type: 'SET_POKEMONS', payload: [ ...response.data.results] })
     setLoading(false)
   }
 
@@ -64,44 +81,45 @@ export function Home({ navigation }) {
   }
 
   async function searchPokemons(pokemonName) {
-    setPokemons([])
+    dispatch({ type: 'SET_POKEMONS', payload: [] })
+
     setLoading(true)
 
     const response = await api.get(`/pokemon/${pokemonName}`)
     
-    setPokemonUrl(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
-    setPokemonName(response.data.name)
+    dispatch({ type: 'SET_POKEMON_URL', payload: `https://pokeapi.co/api/v2/pokemon/${pokemonName}` });
+    dispatch({ type: 'SET_POKEMON_NAME', payload: response.data.name });
     setLoading(false)
   }
 
   // COMO RENDERIZAR MENOS POKEMONS?
   async function searchTypes(type) {
     setSelectedType(type)
-    setPokemons([])
+    dispatch({ type: 'SET_POKEMONS', payload: [] })
     setLoading(true)
 
     const response = await api.get(`/type/${type}`)
     const pokemonNameUrl = response.data.pokemon.map((p) => {
       return { name: p.pokemon.name, url: p.pokemon.url }
     })
-    setPokemons(pokemonNameUrl)
+    dispatch({ type: 'SET_POKEMONS', payload: [...pokemonNameUrl] })
     setLoading(false)
   }
 
   function handleLoadMore() {
     // Pra stackar só tirar isso
-    setPokemons([])
-    setPokemonName('')
-    setPokemonUrl('')
+    dispatch({ type: 'SET_POKEMONS', payload: [] })
+    dispatch({ type: 'SET_POKEMON_URL', payload: '' });
+    dispatch({ type: 'SET_POKEMON_NAME', payload: '' });
     setLoading(true);
 
     setOffset(prevOffset => prevOffset + 10)
   }
 
   function previousPokemons() {
-    setPokemons([])
-    setPokemonName('')
-    setPokemonUrl('')
+    dispatch({ type: 'SET_POKEMONS', payload: [] })
+    dispatch({ type: 'SET_POKEMON_URL', payload: '' });
+    dispatch({ type: 'SET_POKEMON_NAME', payload: '' });
     
     if(offset > 0) {
       setOffset(prevOffset => prevOffset - 10)
@@ -249,13 +267,6 @@ export function Home({ navigation }) {
                     </View>
                   )
                 })}
-
-                {/* Renders the searched Pokemon Name */}
-                {pokemonName && pokemonUrl && (
-                  <View>
-                    <PokemonCard navigation={navigation} title={pokemonName} url={pokemonUrl} />
-                  </View>
-                )}
               </View>
             </View>
           )}
