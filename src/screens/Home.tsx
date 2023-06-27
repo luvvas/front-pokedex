@@ -154,7 +154,7 @@ export function Home({ navigation }) {
 
             {/* Title and Description */}
             <Text className="font-title text-3xl">Pokédex</Text>
-            <Text className="font-body text-xs">Procure pelo nome ou número na Pokédex</Text>
+            <Text className="font-body text-xs">Procure pelo nome do Pokemon</Text>
             
             {/* Search Bar */}
             <View className='flex-row items-center mt-4 justify-between'>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { TouchableOpacity, View, Text } from "react-native";
+import { TouchableOpacity, View, Text, Image } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
 
@@ -15,12 +15,12 @@ export function Auth ({ navigation }) {
   const discovery = {
     authorizationEndpoint: 'https://github.com/login/oauth/authorize',
     tokenEndpoint: 'https://github.com/login/oauth/access_token',
-    revocationEndpoint: 'https://github.com/settings/connections/applications/b316d223394792f3a832',
+    revocationEndpoint: 'https://github.com/settings/connections/applications/6f361610ced9acd91b78',
   };
 
   const [, response, signInWithGithub] = useAuthRequest(
     {
-      clientId: 'b316d223394792f3a832',
+      clientId: '6f361610ced9acd91b78',
       scopes: ['identity'],
       redirectUri: makeRedirectUri({
         scheme: 'pokedex'
@@ -34,8 +34,8 @@ export function Auth ({ navigation }) {
     null,
     {
       params: {
-        client_id: 'b316d223394792f3a832',
-        client_secret: '2c9e27079bf9b0ffeee81696831e707df6f9bfef',
+        client_id: '6f361610ced9acd91b78',
+        client_secret: 'bad997eca2d5a284262d5469d0da4cc20172cdef',
         code,
       },
       headers: {
@@ -72,17 +72,22 @@ export function Auth ({ navigation }) {
 
 
   return (
-    <View className="h-screen justify-center space-y-8 p-8">
+    <View className="h-screen justify-center space-y-8 p-8 justify-between">
       <StatusBar style="dark" translucent />
-
+      <View className="pt-52">
+        <Text style={{ textAlign: 'center', color:'#141823' }} className="font-title text-3xl">Pokédex</Text>
+      </View>
       <TouchableOpacity 
         activeOpacity={0.7}
         className="flex-row justify-center bg-black space-x-3 items-center p-4 rounded-xl"
         onPress={() => signInWithGithub()}
       >
         <AntDesign name="github" size={24} color="white" />
-        <Text className="text-white">Login with Github</Text>
+        <Text className="text-white">Login</Text>
       </TouchableOpacity>
+      <View className="items-center pt-32">
+        <Image className="flex w-40 h-40 justify-center" source={require('../../assets/logo.png')} />
+      </View> 
     </View>
   )
 }

@@ -6,7 +6,8 @@ module.exports = {
       fontFamily: {
         title: 'Poppins_700Bold',
         body: 'Poppins_500Medium',
-        alt: 'Poppins_700Bold_Italic'
+        alt: 'Poppins_700Bold_Italic',
+        loginTitle: './assets/Pokemon Hollow.ttf'
       },
     },
   },
